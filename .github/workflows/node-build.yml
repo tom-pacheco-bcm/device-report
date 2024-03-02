@@ -1,4 +1,4 @@
-name: NodeJS with Gulp
+name: NodeJS with npm run build
 
 on:
   push:
@@ -25,4 +25,4 @@ jobs:
     - name: Build
       run: |
         npm install
-        npm build
+        npm run build
