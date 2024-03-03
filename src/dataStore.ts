@@ -1,9 +1,7 @@
 import { parse } from "./device-report";
 import { isSmartXObject } from "./util/isSmartXObject";
 
-const k_ActiveFW = "ActiveFWRev"
-const k_RSTP = "RSTP"
-const k_rstpStatus = "RSTP Status"
+const REPORT_FILE = Symbol('report-file')
 
 function isBACnetVendorSE(child: ObjectInfo): boolean {
   return child.properties.VendorIdentifier && child.properties.VendorIdentifier.presentationValue === "10";
@@ -12,7 +10,6 @@ function isBACnetVendorSE(child: ObjectInfo): boolean {
 function pathLast(path: string): string {
   return path.substring(path.lastIndexOf('/') + 1)
 }
-
 
 async function getChildren(path: string): Promise<ChildInfo[]> {
 
@@ -120,7 +117,11 @@ function readReports(s: State, emit: () => void) {
     client.readFile(path + "/Diagnostic Files/Device Report")
       .then((result: string) => {
         done()
-        s.Reports[path] = result;
+
+        const report = parse(result)
+        report[REPORT_FILE] = result
+
+        s.Reports[path] = report;
         emit()
       }, done);
   }
@@ -139,7 +140,11 @@ function CreateStore() {
   let interfacePath: string
 
 
-  let _callback: (recs: readonly ControllerInfo[]) => void;
+  let _callback: (state: State) => void;
+
+  function emit() {
+    _callback(state);
+  }
 
   return {
 
@@ -147,7 +152,7 @@ function CreateStore() {
       return relativePath(path, path)
     }
     ,
-    subscribe(callback: (_: readonly ControllerInfo[]) => void) {
+    subscribe(callback: (state: State) => void) {
       _callback = callback;
     }
     ,
@@ -213,42 +218,11 @@ function CreateStore() {
         return m
       }, state.Controllers);
 
-      this.emit();
-      let _emit = this.emit.bind(this)
+      emit();
 
-      readReports(state, _emit)
+      readReports(state, emit)
     }
     ,
-    emit() {
-      _callback(this.getTableData());
-    }
-    ,
-    getTableData(): ControllerInfo[] {
-
-      const paths = state.Paths;
-
-      const _tableData = paths.map(path => {
-
-        const c = state.Controllers[path]
-        const report = state.Reports[path];
-        const data = parse(report)
-
-        return {
-          Name: c.name,
-          Path: c.path,
-          IsOnline: c.online,
-          Firmware: data[k_ActiveFW] || "Unavailable",
-          RSTP: data[k_RSTP] || "Unavailable",
-          RSTPStatus: data[k_rstpStatus] || "Unavailable",
-          MACAddress: data['MACAddress'] || "Unavailable",
-          ProductId: data['Product Id'] || "Unavailable",
-          SerialNumber: data['Serial Number'] || "Unavailable",
-          IPAddress: data['IP Address'] || "Unavailable",
-        }
-      });
-
-      return _tableData;
-    }
   }
 }
 
@@ -257,7 +231,7 @@ export default function CreateDataStore() {
   const data = CreateStore()
 
   return {
-    subscribe(callback: (_: readonly ControllerInfo[]) => void) {
+    subscribe(callback: (state: State) => void) {
       data.subscribe(callback)
     },
 
@@ -266,4 +240,3 @@ export default function CreateDataStore() {
     }
   }
 }
-

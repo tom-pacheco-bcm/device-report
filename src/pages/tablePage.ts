@@ -3,6 +3,10 @@ import { CreateButton } from "../components/button";
 import { ProgressBar } from "../components/progressBar";
 import { CreateTable } from "../components/table";
 
+const k_ActiveFW = "ActiveFWRev"
+const k_RSTP = "RSTP"
+const k_rstpStatus = "RSTP Status"
+
 //component
 export const TablePage = function (): Page {
 
@@ -27,7 +31,7 @@ export const TablePage = function (): Page {
     clickHandler: refreshTable,
   });
 
-  const appElement =  document.getElementById("app")
+  const appElement = document.getElementById("app")
 
   // Create Table
   const dataTable = CreateTable({
@@ -46,8 +50,35 @@ export const TablePage = function (): Page {
     ]
   });
 
+  const getTableData = function (state: State): ControllerInfo[] {
+
+    const paths = state.Paths;
+
+    const _tableData = paths.map(path => {
+
+      const c = state.Controllers[path]
+      const report = state.Reports[path];
+
+      return {
+        Name: c.name,
+        Path: c.path,
+        IsOnline: c.online,
+        Firmware: report[k_ActiveFW] || "Unavailable",
+        RSTP: report[k_RSTP] || "Unavailable",
+        RSTPStatus: report[k_rstpStatus] || "Unavailable",
+        MACAddress: report['MACAddress'] || "Unavailable",
+        ProductId: report['Product Id'] || "Unavailable",
+        SerialNumber: report['Serial Number'] || "Unavailable",
+        IPAddress: report['IP Address'] || "Unavailable",
+      }
+    });
+
+    return _tableData;
+  }
+
   // table Updates
-  const updateTable = (data: readonly ControllerInfo[]) => {
+  const updateTable = (state: State) => {
+    const data = getTableData(state)
     dataTable.update(data);
     refreshCount++;
     progressBar.update((refreshCount / (data.length + 1)) * 100);

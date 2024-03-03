@@ -10,7 +10,7 @@ declare type Controller = {
 declare type State = {
   Paths: string[];
   Controllers: { [path: string]: Controller };
-  Reports: { [path: string]: string };
+  Reports: { [path: string]: { [key: string]: string } };
 };
 
 declare type ControllerInfo = {
@@ -44,3 +44,4 @@ declare type RowValue = {
 declare interface Page {
   show: (visible: Boolean) => void
 }
+
