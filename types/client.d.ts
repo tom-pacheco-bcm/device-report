@@ -450,6 +450,10 @@ declare interface IClient {
    * @param responseType An optional type of response.
    * @returns {string|ArrayBuffer} Returns a string or an ArrayBuffer that can be decoded by a DataView.
    */
+  readFile(objectPath: string): Promise<string>;
+  readFile(objectPath: string, responseType: ReadFileResponseTypeEnum.Text): Promise<string>;
+  readFile(objectPath: string, responseType: ReadFileResponseTypeEnum.Blob): Promise<Blob>;
+  readFile(objectPath: string, responseType: ReadFileResponseTypeEnum.ArrayBuffer): Promise<ArrayBuffer>;
   readFile(objectPath: string, responseType?: ReadFileResponseTypeEnum): Promise<string | ArrayBuffer | Blob>;
 
   /**
