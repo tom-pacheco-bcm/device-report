@@ -12,7 +12,6 @@ export const TablePage = function (): Page {
 
   const dataStore = CreateDataStore()
 
-  let refreshCount = 0;
 
   // Create RefreshButton
   const progressBar = ProgressBar({
@@ -20,7 +19,6 @@ export const TablePage = function (): Page {
   });
 
   const refreshTable = () => {
-    refreshCount = 0;
     progressBar.reset();
     dataStore.load();
   };
@@ -78,10 +76,8 @@ export const TablePage = function (): Page {
 
   // table Updates
   const updateTable = (state: State) => {
-    const data = getTableData(state)
-    dataTable.update(data);
-    refreshCount++;
-    progressBar.update((refreshCount / (data.length + 1)) * 100);
+    dataTable.update(getTableData(state));
+    progressBar.update(state.Progress.Value, state.Progress.Max);
   };
 
   dataStore.subscribe(updateTable);

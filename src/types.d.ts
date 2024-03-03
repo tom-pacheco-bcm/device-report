@@ -7,10 +7,16 @@ declare type Controller = {
   properties: PropertyInfo;
 };
 
+declare type DeviceReport = { [key: string]: string };
+
 declare type State = {
   Paths: string[];
   Controllers: { [path: string]: Controller };
-  Reports: { [path: string]: { [key: string]: string } };
+  Reports: { [path: string]: DeviceReport };
+  Progress: {
+    Value : number
+    Max : number
+  };
 };
 
 declare type ControllerInfo = {

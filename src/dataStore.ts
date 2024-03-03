@@ -35,7 +35,7 @@ function filterTypes(typeName: string) {
   return (children: ChildInfo[]) => children.filter(c => c.typeName === typeName)
 }
 
-function findTypes(typeName: string) {
+function findType(typeName: string) {
   return (children: ChildInfo[]) => children.find(c => c.typeName === typeName)
 }
 
@@ -48,39 +48,19 @@ async function getServerName(): Promise<string> {
   return currentPath.substring(0, i)
 }
 
-async function getServer(): Promise<ObjectInfo> {
+async function getBACnetInterfacePath(serverName: string) {
 
-  const serverName = await getServerName()
-
-  return await client.getObject(serverName)
-}
-
-async function getBACnetInterface(serverName: string) {
-
-  const ifList = await client.getChildren(serverName)
-  const bni = ifList.find(c => c.typeName === "bacnet.Device")
+  const bni = await client.getChildren(serverName)
+    .then(findType("bacnet.Device"))
 
   return bni ? bni.path : ''
 }
-
 
 const getBACnetIPNetworks = async (ifPath: string) => {
   return await client.getChildren(ifPath)
     .then(filterTypes("bacnet.IPDataLink"))
 }
 
-
-function readNetworks(ifPath: string, f: (cs: ChildInfo[]) => void) {
-
-  if (ifPath === undefined || ifPath === "") {
-    return
-  }
-
-  client.getChildren(ifPath)
-    .then(cs => cs.filter(c => c.typeName === "bacnet.IPDataLink"))
-    .then(f)
-
-}
 
 function relativePath(root: string, path: string) {
   if (path.startsWith(root)) {
@@ -89,62 +69,111 @@ function relativePath(root: string, path: string) {
   return path;
 }
 
-function readReports(s: State, emit: () => void) {
-
-  const max_request = 3
-  let counter = 0
-  let pos = 0
-
-  const next = () => {
-    while (pos < s.Paths.length && counter < max_request) {
-      const path = s.Paths[pos]
-      pos++
-      if (s.Controllers[path].online) {
-        makeRequest(path)
-      } else {
-        emit()
-      }
-    }
-  }
-
-  const done = () => {
-    counter--
-    next()
-  }
-
-  const makeRequest = path => {
-    counter++
-    client.readFile(path + "/Diagnostic Files/Device Report")
-      .then((result: string) => {
-        done()
-
-        const report = parse(result)
-        report[REPORT_FILE] = result
-
-        s.Reports[path] = report;
-        emit()
-      }, done);
-  }
-
-  next()
-}
 
 function CreateStore() {
 
   let state: State = {
     Paths: [],
     Controllers: {},
-    Reports: {}
+    Reports: {},
+    Progress: {
+      Value: 0,
+      Max: 1
+    },
   };
 
   let interfacePath: string
-
 
   let _callback: (state: State) => void;
 
   function emit() {
     _callback(state);
   }
+
+  let updateState = function (updater: (state: State) => State) {
+    const newState = updater(state)
+    if (state === newState) { return; }
+    state = newState
+    emit()
+  }
+
+  let addControllers = function (cs: Controller[]) {
+    updateState(state => {
+      return {
+        ...state,
+        Paths: cs.map(cs => cs.path),
+        Controllers: cs.reduce((m, c) => {
+          m[c.path] = c;
+          return m
+        }, { ...state.Controllers }),
+      }
+    })
+  }
+
+  let updateProgress = function (value: number, max: number) {
+    updateState(state => {
+      return {
+        ...state,
+        Progress: {
+          Value: value,
+          Max: max
+        }
+      }
+    })
+  }
+
+  let addReport = function (path: string, report: DeviceReport) {
+    updateState(state => {
+      return {
+        ...state,
+        Reports: {
+          ...state.Reports,
+          [path]: report,
+        },
+      }
+    })
+  }
+
+  function readReports(s: State) {
+
+    const max_request = 3
+    let counter = 0
+    let pos = 0
+
+    updateProgress(0, s.Paths.length)
+
+    const next = () => {
+      while (pos < s.Paths.length && counter < max_request) {
+        const path = s.Paths[pos]
+        pos++
+        if (s.Controllers[path].online) {
+          makeRequest(path)
+        }
+      }
+    }
+
+    const done = () => {
+      counter--
+      next()
+    }
+
+    const makeRequest = path => {
+      counter++
+      client.readFile(path + "/Diagnostic Files/Device Report")
+        .then(
+          result => {
+            done()
+            const report = parse(result)
+            report[REPORT_FILE] = result
+            addReport(path, report)
+            updateProgress(pos, s.Paths.length)
+          },
+          done
+        );
+    }
+    next()
+  }
+
 
   return {
 
@@ -165,7 +194,7 @@ function CreateStore() {
         }
       )
       if (!serverName) { return }
-      interfacePath = await getBACnetInterface(serverName).catch(
+      interfacePath = await getBACnetInterfacePath(serverName).catch(
         e => {
           console.log(e)
           return ""
@@ -211,16 +240,9 @@ function CreateStore() {
         });
 
       cs.sort((a, b) => a.path.localeCompare(b.path))
-      state.Paths = cs.map(cs => cs.path)
 
-      state.Controllers = cs.reduce((m, c) => {
-        m[c.path] = c;
-        return m
-      }, state.Controllers);
-
-      emit();
-
-      readReports(state, emit)
+      addControllers(cs)
+      readReports(state)
     }
     ,
   }

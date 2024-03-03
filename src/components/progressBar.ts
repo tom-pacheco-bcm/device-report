@@ -1,7 +1,7 @@
 
 declare interface ProgressBar {
   reset: () => void,
-  update: (progress: number) => void,
+  update: (value: number, max: number) => void,
 }
 
 declare type ProgressBarProps = {
@@ -11,29 +11,33 @@ declare type ProgressBarProps = {
 // ProgressBar Function
 export function ProgressBar(props: ProgressBarProps): ProgressBar {
 
-  let value = 100
+  let value = 0
+  let maxValue = 1
 
   const progress = props.el.getElementsByTagName("progress").item(0)
 
   const redraw = () => {
-    if (value < 100) {
+    if (value < maxValue) {
       props.el.removeAttribute("hidden")
     } else {
       props.el.setAttribute("hidden", "")
     }
     progress.setAttribute("value", String(value))
-    progress.textContent = `${value}%`
+    progress.setAttribute("max", String(maxValue))
+    progress.textContent = `${value}/${maxValue}`
   };
 
   progress.setAttribute("value", String(value))
 
   const reset = () => {
     value = 0
+    maxValue = 0
     redraw()
   };
 
-  const update = (val: number) => {
+  const update = (val: number, max: number) => {
     value = val
+    maxValue = max
     redraw()
   };
 
