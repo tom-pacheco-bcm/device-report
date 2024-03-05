@@ -31,7 +31,7 @@ ${style}
     </script>
   <div class="footer">
     <div id="version">${options.description}</div>
-    <div id="copyright">BCM Controls 2024</div>
+    <div id="copyright">by BCM Controls</div>
   </div>
 `
     template = template.replace(/(?=<\/head>)/, styleElement)

@@ -22,9 +22,14 @@ export function ProgressBar(props: ProgressBarProps): ProgressBar {
     } else {
       props.el.setAttribute("hidden", "")
     }
-    progress.setAttribute("value", String(value))
+    if (value < 0) {
+      progress.removeAttribute("value")
+      progress.textContent = `0/${maxValue}`
+    } else {
+      progress.setAttribute("value", String(value))
+      progress.textContent = `${value}/${maxValue}`
+    }
     progress.setAttribute("max", String(maxValue))
-    progress.textContent = `${value}/${maxValue}`
   };
 
   progress.setAttribute("value", String(value))

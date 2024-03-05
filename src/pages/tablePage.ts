@@ -61,13 +61,13 @@ export const TablePage = function (): Page {
         Name: c.name,
         Path: c.path,
         IsOnline: c.online,
-        Firmware: report[k_ActiveFW] || "Unavailable",
-        RSTP: report[k_RSTP] || "Unavailable",
-        RSTPStatus: report[k_rstpStatus] || "Unavailable",
-        MACAddress: report['MACAddress'] || "Unavailable",
-        ProductId: report['Product Id'] || "Unavailable",
-        SerialNumber: report['Serial Number'] || "Unavailable",
-        IPAddress: report['IP Address'] || "Unavailable",
+        Firmware: (report && report[k_ActiveFW]) || "Unavailable",
+        RSTP: (report && report[k_RSTP]) || "Unavailable",
+        RSTPStatus: (report && report[k_rstpStatus]) || "Unavailable",
+        MACAddress: (report && report['MACAddress']) || "Unavailable",
+        ProductId: (report && report['Product Id']) || "Unavailable",
+        SerialNumber: (report && report['Serial Number']) || "Unavailable",
+        IPAddress: (report && report['IP Address']) || "Unavailable",
       }
     });
 

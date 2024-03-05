@@ -62,13 +62,76 @@ const getBACnetIPNetworks = async (ifPath: string) => {
 }
 
 
-function relativePath(root: string, path: string) {
-  if (path.startsWith(root)) {
-    return path.substring(root.length + 1)
-  }
-  return path;
+interface Action {
+  type: String
 }
 
+class UpdateProgressAction {
+  type: 'update-progress' = 'update-progress'
+  constructor(public value: number, public max: number) { }
+}
+
+function UpdateProgressReducer(state: State, action: UpdateProgressAction): State {
+
+  if (action.type !== 'update-progress') {
+    return state
+  }
+
+  return {
+    ...state,
+    Progress: {
+      Value: action.value,
+      Max: action.max
+    }
+  }
+}
+
+class DeviceReportAction {
+  type: 'device-report' = 'device-report'
+  constructor(public path: string, public report: DeviceReport) { }
+}
+
+function DeviceReportReducer(state: State, action: DeviceReportAction): State {
+
+  if (action.type !== "device-report") {
+    return state
+  }
+
+  return {
+    ...state,
+    Reports: {
+      ...state.Reports,
+      [action.path]: action.report,
+    },
+  }
+}
+
+class AddControllerAction {
+  type: 'add-controllers' = 'add-controllers'
+  constructor(public controllers: Controller[]) { }
+}
+
+function AddControllerReducer(state: State, action: AddControllerAction): State {
+
+  if (action.type !== "add-controllers") {
+    return state
+  }
+
+  const controllers = action.controllers.reduce((m, c) => {
+    m[c.path] = c;
+    return m
+  }, { ...state.Controllers })
+
+  const paths = Object.values(controllers).map(c => c.path)
+
+  paths.sort((a, b) => a.localeCompare(b))
+
+  return {
+    ...state,
+    Paths: paths,
+    Controllers: controllers,
+  }
+}
 
 function CreateStore() {
 
@@ -84,54 +147,35 @@ function CreateStore() {
 
   let interfacePath: string
 
-  let _callback: (state: State) => void;
+  let _callbacks: ((state: State) => void)[] = [];
 
-  function emit() {
-    _callback(state);
+
+  function subscribe(callback: (state: State) => void): () => void {
+    _callbacks.push(callback);
+    return () => {
+      const i = _callbacks.indexOf(callback);
+      if (i === -1) { return }
+      _callbacks.splice(i, 1)
+    }
   }
 
-  let updateState = function (updater: (state: State) => State) {
-    const newState = updater(state)
-    if (state === newState) { return; }
-    state = newState
-    emit()
-  }
+  function dispatch(action: Action) {
+    const lastState = state
+    switch (action.type) {
+      case 'update-progress':
+        state = UpdateProgressReducer(state, action as UpdateProgressAction)
+        break;
+      case 'device-report':
+        state = DeviceReportReducer(state, action as DeviceReportAction)
+      case 'add-controllers':
+        state = AddControllerReducer(state, action as AddControllerAction)
+      default:
+        break;
+    }
 
-  let addControllers = function (cs: Controller[]) {
-    updateState(state => {
-      return {
-        ...state,
-        Paths: cs.map(cs => cs.path),
-        Controllers: cs.reduce((m, c) => {
-          m[c.path] = c;
-          return m
-        }, { ...state.Controllers }),
-      }
-    })
-  }
-
-  let updateProgress = function (value: number, max: number) {
-    updateState(state => {
-      return {
-        ...state,
-        Progress: {
-          Value: value,
-          Max: max
-        }
-      }
-    })
-  }
-
-  let addReport = function (path: string, report: DeviceReport) {
-    updateState(state => {
-      return {
-        ...state,
-        Reports: {
-          ...state.Reports,
-          [path]: report,
-        },
-      }
-    })
+    if (lastState !== state) {
+      _callbacks.forEach(c => c(state))
+    }
   }
 
   function readReports(s: State) {
@@ -139,8 +183,15 @@ function CreateStore() {
     const max_request = 3
     let counter = 0
     let pos = 0
+    let deviceCount = s.Paths.length
+    let reportCount = 0
 
-    updateProgress(0, s.Paths.length)
+    dispatch(new UpdateProgressAction(0, deviceCount))
+
+    const updateProgress = () => {
+      reportCount++
+      dispatch(new UpdateProgressAction(reportCount, deviceCount))
+    }
 
     const next = () => {
       while (pos < s.Paths.length && counter < max_request) {
@@ -148,11 +199,14 @@ function CreateStore() {
         pos++
         if (s.Controllers[path].online) {
           makeRequest(path)
+        } else {
+          updateProgress()
         }
       }
     }
 
     const done = () => {
+      updateProgress()
       counter--
       next()
     }
@@ -162,53 +216,61 @@ function CreateStore() {
       client.readFile(path + "/Diagnostic Files/Device Report")
         .then(
           result => {
-            done()
             const report = parse(result)
             report[REPORT_FILE] = result
-            addReport(path, report)
-            updateProgress(pos, s.Paths.length)
+            dispatch(new DeviceReportAction(path, report))
+            done()
           },
-          done
+          _ => {
+            console.log('could not read report for:', path)
+            done()
+          }
         );
     }
     next()
   }
 
-
   return {
 
-    getNameFromPath(path: string) {
-      return relativePath(path, path)
-    }
-    ,
-    subscribe(callback: (state: State) => void) {
-      _callback = callback;
-    }
+    subscribe: subscribe
     ,
     async load() {
 
+      dispatch(new UpdateProgressAction(-1, 1))
+
       const serverName = await getServerName().catch(
         e => {
-          console.log(e)
+          console.error(e)
           return ""
         }
       )
-      if (!serverName) { return }
+      if (!serverName) {
+        console.log('could not get server name')
+        return
+      }
       interfacePath = await getBACnetInterfacePath(serverName).catch(
         e => {
-          console.log(e)
+          console.error(e)
           return ""
         }
       )
-      if (!interfacePath) { return }
+      if (!interfacePath) {
+        console.log('no bacnet interface found')
+        return
+      }
+
       const networks = await getBACnetIPNetworks(interfacePath)
+
+      if (networks.length === 0) {
+        console.log('no SpaceLogic devices found')
+      }
 
       let children: ChildInfo[] = []
 
       for (let nw of networks) {
         const list = await getChildren(nw.path).catch(
           e => {
-            console.log(e)
+            console.error(e)
             return []
           }
         )
@@ -218,7 +280,7 @@ function CreateStore() {
       const paths = children.map(item => item.path)
       const childMap = await client.getObjects(paths).catch(
         e => {
-          console.log(e)
+          console.error(e)
           return new Map() as Map<string, ObjectInfo>
         }
       )
@@ -241,7 +303,7 @@ function CreateStore() {
 
       cs.sort((a, b) => a.path.localeCompare(b.path))
 
-      addControllers(cs)
+      dispatch(new AddControllerAction(cs))
       readReports(state)
     }
     ,
@@ -253,8 +315,8 @@ export default function CreateDataStore() {
   const data = CreateStore()
 
   return {
-    subscribe(callback: (state: State) => void) {
-      data.subscribe(callback)
+    subscribe(callback: (state: State) => void): () => void {
+      return data.subscribe(callback)
     },
 
     load() {
