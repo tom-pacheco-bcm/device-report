@@ -86,14 +86,14 @@ function UpdateProgressReducer(state: State, action: UpdateProgressAction): Stat
   }
 }
 
-class DeviceReportAction {
-  type: 'device-report' = 'device-report'
+class AddDeviceReportAction {
+  type: 'add-device-report' = 'add-device-report'
   constructor(public path: string, public report: DeviceReport) { }
 }
 
-function DeviceReportReducer(state: State, action: DeviceReportAction): State {
+function AddDeviceReportReducer(state: State, action: AddDeviceReportAction): State {
 
-  if (action.type !== "device-report") {
+  if (action.type !== 'add-device-report') {
     return state
   }
 
@@ -165,8 +165,8 @@ function CreateStore() {
       case 'update-progress':
         state = UpdateProgressReducer(state, action as UpdateProgressAction)
         break;
-      case 'device-report':
-        state = DeviceReportReducer(state, action as DeviceReportAction)
+      case 'add-device-report':
+        state = AddDeviceReportReducer(state, action as AddDeviceReportAction)
       case 'add-controllers':
         state = AddControllerReducer(state, action as AddControllerAction)
       default:
@@ -218,7 +218,7 @@ function CreateStore() {
           result => {
             const report = parse(result)
             report[REPORT_FILE] = result
-            dispatch(new DeviceReportAction(path, report))
+            dispatch(new AddDeviceReportAction(path, report))
             done()
           },
           _ => {
