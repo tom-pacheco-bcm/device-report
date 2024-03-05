@@ -315,10 +315,7 @@ export default function CreateDataStore() {
   const data = CreateStore()
 
   return {
-    subscribe(callback: (state: State) => void): () => void {
-      return data.subscribe(callback)
-    },
-
+    subscribe: data.subscribe,
     load() {
       data.load()
     }
