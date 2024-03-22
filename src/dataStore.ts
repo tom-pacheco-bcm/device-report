@@ -11,23 +11,23 @@ function pathLast(path: string): string {
   return path.substring(path.lastIndexOf('/') + 1)
 }
 
-async function getChildren(path: string): Promise<ChildInfo[]> {
+async function getChildren(paths: string[]): Promise<ChildInfo[]> {
 
   let children: ChildInfo[] = []
 
-  let c = await client.getChildren(path, false)
-
-  c.forEach(async c => {
-    if (c.typeName === "system.base.Folder") {
-      const x = await getChildren(c.path)
-      children = children.concat(x)
-    } else {
-      children.push(c)
+  for (let path of paths) {
+    let cs = await client.getChildren(path, false)
+    for (let c of cs) {
+      if (c.typeName === "system.base.Folder") {
+        const x = await getChildren([c.path])
+        children = children.concat(x)
+      } else {
+        children.push(c)
+      }
     }
-  })
+  }
 
   children.sort((a, b) => a.path.localeCompare(b.path))
-
   return children
 }
 
@@ -190,6 +190,9 @@ function CreateStore() {
 
     const updateProgress = () => {
       reportCount++
+      if (reportCount >= deviceCount) {
+        console.log(s)
+      }
       dispatch(new UpdateProgressAction(reportCount, deviceCount))
     }
 
@@ -265,46 +268,31 @@ function CreateStore() {
         console.log('no SpaceLogic devices found')
       }
 
-      let children: ChildInfo[] = []
+      getChildren(networks.map(nw => nw.path))
+        .then(children => children.map(item => item.path))
+        .then(paths => client.getObjects(paths))
+        .then(childMap => {
+          let cs: Controller[] = Array.from(childMap.values())
+            .filter(isBACnetVendorSE)
+            .filter(isSmartXObject)
+            .map(child => {
 
-      for (let nw of networks) {
-        const list = await getChildren(nw.path).catch(
-          e => {
-            console.error(e)
-            return []
-          }
-        )
-        children = children.concat(list)
-      }
+              const name = pathLast(child.path);
+              const onLine = child.properties.Status.value.low === 1;
 
-      const paths = children.map(item => item.path)
-      const childMap = await client.getObjects(paths).catch(
-        e => {
-          console.error(e)
-          return new Map() as Map<string, ObjectInfo>
-        }
-      )
+              return {
+                name: name,
+                path: child.path,
+                online: onLine,
+                properties: child.properties
+              }
+            });
 
-      let cs: Controller[] = Array.from(childMap.values())
-        .filter(isBACnetVendorSE)
-        .filter(isSmartXObject)
-        .map(child => {
+          cs.sort((a, b) => a.path.localeCompare(b.path))
 
-          const name = pathLast(child.path);
-          const onLine = child.properties.Status.value.low === 1;
-
-          return {
-            name: name,
-            path: child.path,
-            online: onLine,
-            properties: child.properties
-          }
+          dispatch(new AddControllerAction(cs))
+          readReports(state)
         });
-
-      cs.sort((a, b) => a.path.localeCompare(b.path))
-
-      dispatch(new AddControllerAction(cs))
-      readReports(state)
     }
     ,
   }
