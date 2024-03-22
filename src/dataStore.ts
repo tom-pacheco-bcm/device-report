@@ -190,9 +190,6 @@ function CreateStore() {
 
     const updateProgress = () => {
       reportCount++
-      if (reportCount >= deviceCount) {
-        console.log(s)
-      }
       dispatch(new UpdateProgressAction(reportCount, deviceCount))
     }
 
