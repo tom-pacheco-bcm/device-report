@@ -1,6 +1,6 @@
 {
   "name": "device-report",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Device Report",
   "main": "index.js",
   "scripts": {
