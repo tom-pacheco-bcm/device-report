@@ -14,8 +14,8 @@ declare type State = {
   Controllers: { [path: string]: Controller };
   Reports: { [path: string]: DeviceReport };
   Progress: {
-    Value : number
-    Max : number
+    Value: number
+    Max: number
   };
 };
 
@@ -51,3 +51,28 @@ declare interface Page {
   show: (visible: Boolean) => void
 }
 
+
+type Observer<T> = (s: T) => void
+
+declare interface Action {
+  type: String
+}
+
+type Dispatch = (a: Action) => void
+
+type DispatchProcessor = (next: Dispatch) => Dispatch
+
+type Reducer<S> = (s: S, a: Action) => S
+
+type Middleware<S> = (s: StoreLike<S>) => (next: Dispatch) => (a: Action) => void
+
+type StoreLike<S> = {
+  dispatch: Dispatch
+  getState: () => S
+}
+
+type StoreKind<S> = StoreLike<S> & {
+  subscribe: (s: S) => () => void
+}
+
+type CreateStore<S> = (reducer: Reducer<S>, initialState: S) => StoreKind<S>
