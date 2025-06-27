@@ -25,14 +25,16 @@ export function makeHtml(options: TgmlOptions) {
     const styleElement = `    <style>
 ${style}
     </style>
-    `
+
+`
     const scriptElement = `    <script>
-    ${script}
+${script}
     </script>
-  <div class="footer">
-    <div id="version">${options.description}</div>
-    <div id="copyright">by BCM Controls</div>
-  </div>
+    <div class="footer">
+        <div id="version">${options.description}</div>
+        <div id="copyright">by BCM Controls</div>
+    </div>
+
 `
     template = template.replace(/(?=<\/head>)/, styleElement)
     template = template.replace(/(?=<\/body>)/, scriptElement)
