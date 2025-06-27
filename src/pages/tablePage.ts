@@ -29,6 +29,14 @@ export const TablePage = function (): Page {
     clickHandler: refreshTable,
   });
 
+  // Create PrintButton
+  CreateButton({
+    el: document.getElementById("print-button"),
+    clickHandler: () => {
+      window.print();
+    }
+  });
+
   const appElement = document.getElementById("app")
 
   // Create Table

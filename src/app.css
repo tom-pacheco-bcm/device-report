@@ -45,6 +45,7 @@ button {
   background-color: #42B4E6;
   color: white;
   padding: 1rem 2rem;
+  border-radius: 1rem;
   text-decoration: none;
   font-size: 1.5rem;
   font-weight: 600;
@@ -104,4 +105,54 @@ button:active {
 
 .status-unknown {
   color: #626469;
+}
+
+.print-button {
+  position: absolute;
+  right: 1rem;
+}
+
+@media print {
+
+  footer {
+    position: fixed;
+    bottom: 0;
+    display: block;
+  }
+
+  html,
+  body {
+    font-size: small;
+    background-color: none;
+  }
+
+  table {
+    padding: 1rem 2rem;
+    border-collapse: collapse;
+    border: 0.5px solid grey;
+    background-color: none;
+    width: 95%;
+  }
+
+  thead th,
+  thead td,
+  tbody th,
+  tbody td {
+    font-weight: 400;
+    border-bottom: 0.5px solid grey;
+  }
+
+  .header {
+    display: none;
+  }
+
+  .do-not-print {
+    display: none;
+  }
+
+  @page {
+    size: landscape;
+    margin: 0.25in;
+  }
+
 }
