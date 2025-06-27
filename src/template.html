@@ -10,15 +10,18 @@
 <body>
   <div class="header">Device Report</div>
   <div class="controls do-not-print">
-    <button id="refresh">Refresh!</button>
-    <div id="progress">
-      <label>Loading:</label>
-      <progress max="100" value="100">100%</progress>
+    <div class="control-refresh">
+      <button id="refresh">Refresh!</button>
+      <div id="progress">
+        <label>Loading:</label>
+        <progress max="100" value="100">100%</progress>
+      </div>
     </div>
     <button id="print-button" class="print-button">Print pdf</button>
   </div>
   <div id="app">
   </div>
+  <p><span id="datetime"></span></p>
   <script src="/publicweb/client_api.js"></script>
 </body>
 

@@ -12,6 +12,12 @@ export const TablePage = function (): Page {
 
   const dataStore = CreateDataStore()
 
+  // Set the current date and time in the header
+  const dateTimeElement = document.getElementById("datetime");
+  if (dateTimeElement) {
+    const now = new Date();
+    dateTimeElement.textContent = now.toLocaleString("en-US");
+  }
 
   // Create RefreshButton
   const progressBar = ProgressBar({

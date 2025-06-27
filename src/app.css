@@ -4,6 +4,10 @@ body {
   margin: 0;
 }
 
+p {
+  padding: 1rem 2rem;
+}
+
 table {
   padding: 1rem 2rem;
   border-collapse: collapse;
@@ -43,11 +47,12 @@ tbody:last-child {
 
 button {
   background-color: #42B4E6;
+  border: 0.1px solid darkblue;
   color: white;
-  padding: 1rem 2rem;
+  padding: 0.5rem 1rem;
   border-radius: 1rem;
   text-decoration: none;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 600;
 }
 
@@ -70,6 +75,11 @@ button:active {
 .controls {
   margin: 1rem;
   display: flex;
+}
+
+.control-refresh {
+  display: flex;
+  flex: 1;
   align-items: center;
   gap: 1rem;
 }
@@ -81,6 +91,10 @@ button:active {
   padding: 1rem;
   font-size: 1.8rem;
   margin: 0;
+}
+
+#datetime {
+  float: inline-end;
 }
 
 .footer {
@@ -105,11 +119,6 @@ button:active {
 
 .status-unknown {
   color: #626469;
-}
-
-.print-button {
-  position: absolute;
-  right: 1rem;
 }
 
 @media print {
