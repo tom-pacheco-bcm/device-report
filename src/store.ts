@@ -1,3 +1,4 @@
+import { create } from "domain";
 
 
 const compose = function <T, U>(processors: DispatchProcessor[]): DispatchProcessor {
@@ -21,38 +22,27 @@ export class Store<T> {
   dispatch: (action: Action) => void;
   getState: () => T;
 
-  constructor(reducer: Reducer<T>,
-    initialState: T,
-    ...middlewares: Middleware<T>[]) {
+  constructor(reducer: Reducer<T>, initialState: T) {
+    let state = initialState;
 
-    let state = initialState
+    this.getState = () => state;
 
-    const getState = () => state
-
-    const dispatch = (action: Action) => {
+    this.dispatch = (action: Action) => {
       const lastState = state
-      state = reducer(state, action)
-      if (lastState !== state) {
-        this.#subscriptions.forEach(c => c(state))
+      const nextState = reducer(lastState, action)
+      if (!nextState) {
+        return
       }
-    }
-
-    this.getState = getState
-    this.dispatch = dispatch
-
-    if (middlewares) {
-      const middlewareAPI = {
-        getState: getState,
-        dispatch: (a: Action) => { throw new Error(); }
-      };
-
-      const chain = middlewares.map(middleware => middleware(middlewareAPI));
-      this.dispatch = compose(chain)(dispatch);
+      state = nextState;
+      if (lastState !== nextState) {
+        this.#subscriptions.forEach(c => c(nextState))
+      }
     }
   }
 
   subscribe(observer: Observer<T>): () => void {
     this.#subscriptions.push(observer);
+    observer(this.getState());
     return () => {
       const i = this.#subscriptions.indexOf(observer);
       if (i === -1) {
@@ -63,4 +53,15 @@ export class Store<T> {
   }
 }
 
+
+export function createStore<T>(reducer: Reducer<T>, initialState: T, ...middlewares: Middleware<T>[]) {
+  const s = new Store(reducer, initialState)
+
+  if (middlewares) {
+    const chain = middlewares.map(middleware => middleware(s));
+    s.dispatch = compose(chain)(s.dispatch);
+  }
+
+  return s;
+};
 

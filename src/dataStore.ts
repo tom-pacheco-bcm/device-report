@@ -1,5 +1,6 @@
+import { controllerIsOnline } from "./util/controllerIsOnline";
 import { parse } from "./device-report";
-import { Store } from "./store";
+import { createStore, Store } from "./store";
 import { isSmartXObject } from "./util/isSmartXObject";
 
 const REPORT_FILE = Symbol('report-file')
@@ -167,19 +168,26 @@ class Progress {
   constructor(private store: Store<State>) {
     this.reset()
   }
+
   reset() {
     this.reportCount = 0
     const s = this.store.getState()
     this.deviceCount = s.Paths.length
-    this.store.dispatch(new UpdateProgressAction(this.reportCount, this.deviceCount))
+    this.dispatch()
   }
+
   update(inc: number = 1) {
     this.reportCount += inc
+    this.dispatch()
+  }
+
+  dispatch() {
     this.store.dispatch(new UpdateProgressAction(this.reportCount, this.deviceCount))
   }
 }
 
 async function readReports(store: Store<State>) {
+
   const s = store.getState()
 
   const max_request = 3
@@ -187,7 +195,6 @@ async function readReports(store: Store<State>) {
   let pos = 0
   const progress = new Progress(store)
 
-  progress.reset()
 
   const next = () => {
     while (pos < s.Paths.length && counter < max_request) {
@@ -264,9 +271,8 @@ async function load(store: Store<State>) {
         .filter(isBACnetVendorSE)
         .filter(isSmartXObject)
         .map(child => {
-
           const name = pathLast(child.path);
-          const onLine = child.properties.Status.value.low === 1;
+          const onLine = controllerIsOnline(child);
 
           return {
             name: name,
@@ -295,7 +301,7 @@ const reportReader =
 
 export default function CreateDataStore() {
 
-  const store = new Store(reducer, initialState, reportReader);
+  const store = createStore(reducer, initialState, reportReader);
 
   return {
     subscribe(observer: Observer<State>) {
