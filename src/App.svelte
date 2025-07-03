@@ -1,11 +1,10 @@
 <script lang="ts">
   import "./app.css";
-  import { derived } from "svelte/store";
 
   import ProgressBar from "./components/ProgressBar.svelte";
   import ControllerTable from "./components/ControllerTable.svelte";
   import VersionInfo from "./components/VersionInfo.svelte";
-  import { load, refreshTable, appState } from "./Data.svelte.ts";
+  import { load, refreshTable, appState } from "./Data.svelte";
 
   load().then(() => {
     // Initial load complete
