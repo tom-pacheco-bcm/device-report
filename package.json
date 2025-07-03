@@ -1,6 +1,6 @@
 {
   "name": "device-report",
-  "version": "1.4.0alpha",
+  "version": "1.4.0",
   "description": "Device Report",
   "scripts": {
     "compile": "tsc",
