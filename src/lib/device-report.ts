@@ -39,8 +39,8 @@ const skip_sections = [
   "EOS",
 ]
 
-export function parse(txt: string) {
-  const data = {}
+export function parse(txt: string): Dictionary<string> {
+  const data: Dictionary<string> = {}
   if (!txt) {
     return data;
   }

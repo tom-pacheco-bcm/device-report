@@ -9,7 +9,8 @@ function copyfile(src: string, dest: string) {
     if (fs.existsSync(dest) && fs.statSync(dest).isDirectory()) {
         dest = dest + path.basename(src);
     }
-    fs.writeFileSync(dest, fs.readFileSync(src));
+    let b = fs.readFileSync(src, 'utf8');
+    fs.writeFileSync(dest, b.toString(), 'utf8');
 }
 
 

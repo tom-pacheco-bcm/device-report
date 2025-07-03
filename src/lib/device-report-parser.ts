@@ -1,4 +1,5 @@
 
+
 const sections = [
   "Controller Memory Data",
   "Manufacturing data",
@@ -48,7 +49,7 @@ declare type DeviceReport = {
     Filesystem?: string
     HealthCheck?: string
     Initialized?: Date
-    [name: string]: string | Date | Number
+    [name: string]: string | Date | Number | undefined
   }
 
   ControllerMemory?: {
@@ -60,9 +61,8 @@ declare type DeviceReport = {
     ModelNumber?: string
     ProductId?: string
     MACAddress?: string
-    [name: string]: string | Date | Number
+    [name: string]: string | Date | Number | undefined
   }
-
 
   NetworkConfiguration?: {
     IPAddress?: string
@@ -70,7 +70,7 @@ declare type DeviceReport = {
     DefaultRouter?: string
     DHCP?: string
     IPAssignment?: string
-    [name: string]: string | Date | Number
+    [name: string]: string | Date | Number | undefined
   }
 
   FirmwareUpdateHistory?: string[]
@@ -85,7 +85,7 @@ declare type DeviceReport = {
     RoomUnitApplicationFileVersion?: string
     RoomUnitBootloaderFileVersion?: string
     CPUFirmwareVersionChangeReason?: string
-    [name: string]: string | Date | Number
+    [name: string]: string | Date | Number | undefined
   }
   // Most recent 
   FWDownloadLog?: string[]
@@ -113,7 +113,7 @@ declare type DeviceReport = {
     Bluetooth?: string
     RS485PortAFunction?: string
     RS485PortBFunction?: string
-    [name: string]: string | Date | Number
+    [name: string]: string | Date | Number | undefined
   }
 
   FileSystem?: {
@@ -123,11 +123,9 @@ declare type DeviceReport = {
     FreeSpace?: number
     BadSpace?: number
   }
-
 }
 
-
-export function parseLines(lines: string[], pos: number) {
+function parseLines(lines: string[], pos: number) {
   const start = pos
   while (1) {
     let i = lines[pos].indexOf(':');
@@ -144,7 +142,7 @@ export function parseLines(lines: string[], pos: number) {
 }
 
 export function parse1(txt: string) {
-  const data = {}
+  const data: Dictionary<string> = {}
   let sect = []
   let hive = "Header"
   if (!txt) {
@@ -182,7 +180,7 @@ export function parse1(txt: string) {
 
 
 export function parse(txt: string) {
-  const data = {}
+  const data: Dictionary<string> = {}
   if (!txt) {
     return data;
   }
@@ -217,6 +215,7 @@ type Cursor = {
   data: string
   start: number
   pos: number
+  [_: number]: string
 }
 
 
@@ -238,7 +237,6 @@ function acceptor(ch: string) {
   }
 }
 
-
 function acceptWhitespace(c: Cursor): boolean {
   let pos = c.pos
   while (c[pos] === ' ') { pos++ }
@@ -253,20 +251,19 @@ function acceptNewLine(c: Cursor): boolean {
     return false
   }
   c.start++
-  return
+  return true
 }
 
 function acceptLine(c: Cursor): boolean {
   while (c.data[c.pos] !== '\n') {
     c.pos++
   }
-  return
+  return true
 }
 
 
-
 let re1 = /DEVICE REPORT: (.*) - BACnet ID: (\d+) Generated: (.*)/
-let re2 = /Filesystem \((.*))\) Health Check Normal. Initialized: (.*)/
+let re2 = /Filesystem \((.*)\) Health Check Normal. Initialized: (.*)/
 
 function parseHeader(txt: string[]) {
 
