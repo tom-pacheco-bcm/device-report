@@ -1,16 +1,16 @@
+import { parse } from "./device-report";
 
-import { getBACnetInterfacePath } from "./client-helpers/getBACnetInterfacePath";
-import { getBACnetIPNetworks } from "./client-helpers/getBACnetIPNetworks";
-import { getChildren } from "./client-helpers/getChildren";
-import { getServerName } from "./client-helpers/getServerName";
+import { getBACnetInterfacePath } from "../client-helpers/getBACnetInterfacePath";
+import { getBACnetIPNetworks } from "../client-helpers/getBACnetIPNetworks";
+import { getChildren } from "../client-helpers/getChildren";
+import { getServerName } from "../client-helpers/getServerName";
 
-import { controllerIsOnline } from "./util/controllerIsOnline";
-import { isBACnetVendorSE } from "./util/isBACnetVendorSE";
-import { isSmartXObject } from "./util/isSmartXObject";
-import { pathsSelector } from "./util/pathsSelector";
-import { pathLast } from "./util/pathLast";
+import { controllerIsOnline } from "../util/controllerIsOnline";
+import { isBACnetVendorSE } from "../util/isBACnetVendorSE";
+import { isSmartXObject } from "../util/isSmartXObject";
+import { pathsSelector } from "../util/pathsSelector";
+import { pathLast } from "../util/pathLast";
 
-import { parse } from "./lib/device-report";
 
 const REPORT_FILE = Symbol("report-file");
 
