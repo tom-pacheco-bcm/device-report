@@ -1,6 +1,4 @@
 <script lang="ts">
-  import ControllerTable from "./ControllerTable.svelte";
-
   const k_ActiveFW = "ActiveFWRev";
   const k_RSTP = "RSTP";
   const k_rstpStatus = "RSTP Status";
@@ -12,8 +10,6 @@
 
   let { appState }: { appState: State } = $props();
 
-  let controller_infos: ControllerInfo[] = $derived(getTableData(appState));
-
   const getTableData = function (appState: State): ControllerInfo[] {
     const _tableData = appState.Paths.map((path) => {
       const controller = appState.Controllers[path];
@@ -23,7 +19,15 @@
         Name: controller.name,
         Path: controller.path,
         IsOnline: controller.online,
+        Firmware: UNAVAILABLE,
+        RSTP: UNAVAILABLE,
+        RSTPStatus: UNAVAILABLE,
+        MACAddress: UNAVAILABLE,
+        ProductId: UNAVAILABLE,
+        SerialNumber: UNAVAILABLE,
+        IPAddress: UNAVAILABLE,
       };
+
       if (report) {
         info.Firmware = report[k_ActiveFW];
         info.RSTP = report[k_RSTP];
@@ -37,6 +41,8 @@
     });
     return _tableData;
   };
+
+  let controller_infos: ControllerInfo[] = $derived(getTableData(appState));
 
   const columns: {
     title: string;
@@ -54,7 +60,7 @@
     },
     {
       title: "Status",
-      value: (ci) => (ci.IsOnline ? "Online" : "Offline") || UNAVAILABLE,
+      value: (ci) => (ci.IsOnline ? "Online" : "Offline"),
       format: (ci) =>
         ci.IsOnline ? "text-green-700" : "text-red-700 font-semibold",
     },
