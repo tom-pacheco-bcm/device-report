@@ -1,20 +1,28 @@
 
-export async function getChildren(paths: string[]): Promise<ChildInfo[]> {
+export async function getAllChildren(paths: string[]): Promise<ChildInfo[]> {
 
-  let children: ChildInfo[] = [];
+  const children: ChildInfo[] = []
 
   for (let path of paths) {
-    let cs = await client.getChildren(path, false);
-    for (let c of cs) {
-      if (c.typeName === "system.base.Folder") {
-        const x = await getChildren([c.path]);
-        children = children.concat(x);
-      } else {
-        children.push(c);
-      }
+    const c = await getChildren(path)
+    children.push(...c)
+  }
+  return children;
+}
+
+export async function getChildren(path: string): Promise<ChildInfo[]> {
+
+  const children: ChildInfo[] = [];
+
+  const cs = await client.getChildren(path, false);
+
+  for (let c of cs) {
+    if (c.typeName === "system.base.Folder") {
+      const x = await getChildren(c.path);
+      children.push(...x);
+    } else {
+      children.push(c);
     }
   }
-
-  children.sort((a, b) => a.path.localeCompare(b.path));
   return children;
 }

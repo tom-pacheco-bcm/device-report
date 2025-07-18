@@ -4,7 +4,7 @@
   import ProgressBar from "./lib/components/ProgressBar.svelte";
   import ControllerTable from "./lib/components/ControllerTable.svelte";
   import VersionInfo from "./lib/components/VersionInfo.svelte";
-  import { load, refreshTable, appState } from "./lib/data/Data.svelte";
+  import { load, appState } from "./lib/data/Data.svelte";
 
   load().then(() => {
     // Initial load complete
@@ -17,19 +17,13 @@
 
 <div class="flex flex-col gap-5 print:text-sm">
   <div
-    class="bg-emerald-800 p-2 text-xl font-semibold text-neutral-100 print:hidden"
+    class="bg-emerald-800 p-2 text-2xl font-semibold text-neutral-100 print:hidden"
   >
     Device Report
   </div>
 
   <div class="m-2 p-2 flex content-center gap-10 print:hidden">
     <div class="flex-1 flex gap-4">
-      <button
-        class="px-4 py-2 bg-sky-300 border border-blue-700 rounded-md hover:bg-blue-400 font-semibold text-md"
-        onclick={refreshTable}
-      >
-        Refresh!
-      </button>
       <ProgressBar
         value={appState.Progress.Value}
         max={appState.Progress.Max}
@@ -37,7 +31,7 @@
     </div>
     <div>
       <button
-        class="px-4 py-2 bg-sky-300 border border-blue-700 rounded-md hover:bg-blue-400 font-semibold text-md"
+        class="px-4 py-2 bg-sky-300 border border-blue-700 rounded-md hover:bg-blue-400 font-semibold text-md cursor-pointer"
         onclick={print}
       >
         Print pdf

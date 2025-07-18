@@ -1,5 +1,4 @@
-export function pathsSelector(items: { path: string; }[]) {
-  return items.map(item => item.path);
-}
+export const pathsSelector = (items: Pathed[]) =>
+  items.map(item => item.path);
 
 

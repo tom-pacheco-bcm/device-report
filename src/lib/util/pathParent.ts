@@ -1,6 +1,6 @@
 
-// getParentPath returns one path level higher
-export function getParentPath(path: string) {
+// pathParent returns one path level higher
+export const pathParent = (path: string) => {
   // get parent of string path
   const end = path.lastIndexOf("/");
   if (end === -1) {
