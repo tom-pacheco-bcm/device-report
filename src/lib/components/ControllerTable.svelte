@@ -246,7 +246,7 @@
 
 <Report bind:showModal={showReport}>
   {#snippet header()}
-    <div class="p-2 bg-neutral-100 font-semibold text-md">
+    <div class="font-semibold text-lg">
       <h2>Device Report</h2>
     </div>
   {/snippet}
