@@ -89,7 +89,7 @@ declare type DialogPropertyPathConfiguration = {
 declare type ChildInfo = {
   path: string;
   typeName: string;
-  description: string;
+  description?: string;
   propertyNames?: string[];
 };
 
