@@ -1,0 +1,237 @@
+DEVICE REPORT: MNH3100CEF003 - BACnet ID: 3071021 Generated: 5-18-2021  13:59:43
+
+
+Filesystem (4.0) Health Check Normal. Initialized: 2-4-2021  20:40:16
+
+
+Controller Memory Data:
+Free object system memory: 1804.2 Kbytes
+
+Manufacturing data:
+Serial Number: 3N201640062
+Model Number: 015A
+Product Id: MP-C-15A
+MACAddress: 00:80:f4:47:ce:8a
+
+Network Configuration Data:
+IP Address: 10.110.210.28
+Subnet Mask: 255.255.255.0
+Default Router: 0.0.0.0
+DHCP: Enabled 
+IP Assignment: DHCP
+
+Firmware Update History:
+IP-Controller, booting from version: 3.02.02.00018  Time Stamp: 2- 4-2021 20:40:22.53
+
+
+
+Firmware and Uprev Info:
+Version:
+ActiveFWRev=3.02.02.00018 
+InactiveFWRev=1.00.04.00019
+
+BootApplet Version: 3.02.02.00018
+
+LBA Signature: UBL gb35b960 SMF
+
+
+Main Board Firmware Version: 3.02.00003
+
+RoomUnit Application File Version: 1.03.11
+
+RoomUnit Bootloader File Version: 0.03.04
+
+
+Reason for CPU Firmware Version Change:
+CPU Firmware Upgrade
+
+
+Most recent FW Download Log:
+3-22-2021  12:02:36 - 3.02.02.00018 - .ProgramBin_22186$ downloaded, not found on list of known files.
+3-22-2021  12:02:38 - 3.02.02.00018 - .ProgramBin_22185$ downloaded, not found on list of known files.
+3-22-2021  12:02:39 - 3.02.02.00018 - .ProgramBin_22184$ downloaded, not found on list of known files.
+3-22-2021  12:02:40 - 3.02.02.00018 - .ProgramBin_22183$ downloaded, not found on list of known files.
+3-22-2021  12:02:41 - 3.02.02.00018 - .ProgramBin_22182$ downloaded, not found on list of known files.
+3-22-2021  12:02:41 - 3.02.02.00018 - .ProgramBin_22181$ downloaded, not found on list of known files.
+3-22-2021  12:02:43 - 3.02.02.00018 - .ProgramBin_21243$ downloaded, not found on list of known files.
+3-22-2021  12:02:43 - 3.02.02.00018 - .ProgramBin_21242$ downloaded, not found on list of known files.
+3-22-2021  12:02:44 - 3.02.02.00018 - .ProgramBin_21241$ downloaded, not found on list of known files.
+3-22-2021  12:02:45 - 3.02.02.00018 - .ProgramBin_21143$ downloaded, not found on list of known files.
+3-22-2021  12:02:46 - 3.02.02.00018 - .ProgramBin_21142$ downloaded, not found on list of known files.
+3-22-2021  12:02:46 - 3.02.02.00018 - .ProgramBin_21141$ downloaded, not found on list of known files.
+3-22-2021  12:02:47 - 3.02.02.00018 - .ProgramBin_18$ downloaded, not found on list of known files.
+3-22-2021  12:02:48 - 3.02.02.00018 - .ProgramBin_19$ downloaded, not found on list of known files.
+3-22-2021  12:02:49 - 3.02.02.00018 - .ProgramBin_20$ downloaded, not found on list of known files.
+
+
+Most recent uprev log:
+2-4-2021  20:49:52 - 3.02.02.00018 - Information: From metadata file: CPUVersion=3.02.02.00018
+2-4-2021  20:49:52 - 3.02.02.00018 - Information: From metadata file: RUBootloader.sbo,RUFirmware.sbo,RUDisplay.sbo
+2-4-2021  20:49:52 - 3.02.02.00018 - Information: All files accounted for
+2-4-2021  20:49:52 - 3.02.02.00018 - Information: Deleted old recipe file
+2-4-2021  20:49:53 - 3.02.02.00018 - Information: While performing cleanup, skipping the deletion of RUFirmware.xbin because it is on the ignore list
+2-4-2021  20:49:53 - 3.02.02.00018 - Information: While performing cleanup, skipping the deletion of RUDisplay.bin because it is on the ignore list
+2-4-2021  20:49:53 - 3.02.02.00018 - Information: While performing cleanup, skipping the deletion of RUBootloader.xbin because it is on the ignore list
+2-4-2021  20:49:53 - 3.02.02.00018 - Information: While performing cleanup, skipping the deletion of RUDisplay.bin because it is on the ignore list
+2-4-2021  20:49:53 - 3.02.02.00018 - Information: While performing cleanup, skipping the deletion of LightDali.cfw because it is on the ignore list
+2-4-2021  20:49:54 - 3.02.02.00018 - Information: While performing cleanup, skipping the deletion of BlindHV.cfw because it is on the ignore list
+2-4-2021  20:49:54 - 3.02.02.00018 - Information: While performing cleanup, skipping the deletion of BlindLV.cfw because it is on the ignore list
+2-4-2021  20:49:54 - 3.02.02.00018 - Information: While performing cleanup, skipping the deletion of MultiSensor.cfw because it is on the ignore list
+2-4-2021  20:49:54 - 3.02.02.00018 - Information: While performing cleanup, skipping the deletion of Light10V.cfw because it is on the ignore list
+2-4-2021  20:49:55 - 3.02.02.00018 - Information: While performing cleanup, skipping the deletion of BlindSMILV.cfw because it is on the ignore list
+2-4-2021  20:49:55 - 3.02.02.00018 - Information: While performing cleanup, skipping the deletion of BlindSMIHV.cfw because it is on the ignore list
+2-4-2021  20:49:55 - 3.02.02.00018 - Information: Performed file cleanup
+2-4-2021  20:49:55 - 3.02.02.00018 - Information: Renamed files (activated)
+2-4-2021  20:49:56 - 3.02.02.00018 - Information: Writing recipe: Not adding RUBootloader.sbo to the recipe because it is on the ignore list
+2-4-2021  20:49:56 - 3.02.02.00018 - Information: Writing recipe: Not adding RUFirmware.sbo to the recipe because it is on the ignore list
+2-4-2021  20:49:56 - 3.02.02.00018 - Information: Writing recipe: Not adding RUDisplay.sbo to the recipe because it is on the ignore list
+2-4-2021  20:49:57 - 3.02.02.00018 - Recipe Contents: 
+2-4-2021  20:49:57 - 3.02.02.00018 - The recipe file is empty because all firmware files are on the ignore list, or are unknown
+2-4-2021  20:49:57 - 3.02.02.00018 - Deleted the empty recipe file
+2-4-2021  20:49:57 - 3.02.02.00018 - Not starting uprev because all firmware files are on the ignore list
+
+
+Previous FW Download log:
+2-4-2021  20:45:55 - 3.02.02.00018 - RUBootloader.sbo downloaded.
+2-4-2021  20:46:00 - 3.02.02.00018 - RUFirmware.sbo downloaded.
+2-4-2021  20:46:05 - 3.02.02.00018 - RUDisplay.sbo downloaded.
+2-4-2021  20:46:06 - 3.02.02.00018 - Manifest.txt downloaded.
+2-4-2021  20:46:07 - 3.02.02.00018 - MetaData.txt downloaded.
+2-4-2021  20:46:07 - 3.02.02.00018 - Finished Download Result.
+
+
+Firmware Reset/Restart History:
+ 5-15-2021 19:32:43.02  0x00006413 0x6000001e 0x8001ab31 0x00000000 0x00000000 POWERCYCLE 
+
+
+Host Server Information:
+Name: BAEMNH_AS07
+ID: 3070000
+Location: 
+
+
+Device Settings Data:
+
+Display Network Information: Enabled
+Ethernet Port 2: Enabled
+USB Host port: Enabled
+USB Device port: Enabled
+WhiteList: Disabled
+RSTP: Enabled
+RSTP Status: Operational
+Display Status: Detached
+Handoverride: Enabled
+Bluetooth(BLE): Disabled
+RS485-PortA Function: Sensor Bus
+RS485-PortA Function: Disabled
+
+
+Files in Root Directory:
+Filename                                Filesize        Last modified
+FSCheck                                       71        02/04/2021  20:40:16
+CrashReport                                    0        02/04/2021  20:40:16
+UpRevStatus.txt                               57        05/15/2021  19:32:42
+UprevHistory.txt                              87        02/04/2021  20:40:22
+cfg.db                                     26624        05/18/2021  13:22:10
+TechToolIOLog                                  0        02/04/2021  20:40:22
+TechToolCommissioningLog                       0        02/04/2021  20:40:22
+Type Information                               0        02/04/2021  20:40:22
+DownloadResult.txt                          1551        03/22/2021  12:02:48
+oldDownloadResult.txt                        386        02/04/2021  20:46:06
+RUDisplay.bin                             262144        02/04/2021  20:46:04
+_RUBootloader.xbin                        237587        02/04/2021  20:45:54
+Manifest.txt                                5005        02/04/2021  20:46:06
+MetaData.txt                                 152        02/04/2021  20:46:06
+RecipeUpgradeResult.txt                     2939        02/04/2021  20:49:56
+_RUFirmware.xbin                          237586        02/04/2021  20:46:00
+.ProgramBin_22186$                          1432        03/22/2021  12:02:34
+.ProgramBin_22185$                          2459        03/22/2021  12:02:38
+.ProgramBin_22184$                          1765        03/22/2021  12:02:38
+.ProgramBin_22183$                          2568        03/22/2021  12:02:40
+.ProgramBin_22182$                          1738        03/22/2021  12:02:40
+.ProgramBin_22181$                          1814        03/22/2021  12:02:40
+.ProgramBin_21243$                          3382        03/22/2021  12:02:42
+.ProgramBin_21242$                          1724        03/22/2021  12:02:42
+.ProgramBin_21241$                          2653        03/22/2021  12:02:44
+.ProgramBin_21143$                          3382        03/22/2021  12:02:44
+.ProgramBin_21142$                          1724        03/22/2021  12:02:44
+.ProgramBin_21141$                          2653        03/22/2021  12:02:46
+.ProgramBin_18$                             2449        03/22/2021  12:02:46
+.ProgramBin_19$                             4680        03/22/2021  12:02:48
+.ProgramBin_20$                             4282        03/22/2021  12:02:48
+DeviceReport                               11591        04/09/2021  15:35:40
+ResetRestartHistory.txt                       92        05/18/2021  13:59:44
+
+Filesystem Volume Size                   8163328 bytes
+Filesystem Used Space                     845312 bytes
+Filesystem Free Space                    7318016 bytes
+Filesystem Bad Space                           0 bytes
+
+
+
+
+IO CEC:
+CPU side: 0
+IO Board side ...
+  TO  : 0
+  CRC : 0
+  US  : 0
+  OS  : 0
+
+
+
+
+R:
+0x80000000 : 001D439C  80000040  00000040  26594131 
+0x80000010 : FEFEFEFE  3FFFFFFF  30200018  20102002 
+0x80000020 : 80000048  BAEAFFFF  FFFFFFFF  FFFFFFFF 
+0x80000030 : FFFFFFFF  FFFFFFFF  FFFFFFFF  4A030816 
+0x80000040 : E51FF004  80000080  00000002  00000000 
+
+B:
+0x100D0000 : 56190527  32AFE8DA  60FD8E5F  28950A00 
+0x100D0010 : 00000081  40000081  3AAB0881  00020205 
+0x100D0020 : 4C58504D  32534543  746F6F42  00707041 
+0x100D0030 : 00000000  00000000  00000000  00000000 
+0x100D0040 : 000A94E8  81000040  00000040  26594131 
+0x100D0050 : FEFEFEFE  3FFFFFFF  30200018  20102002 
+0x100D0060 : 81000048  BABADAFF  FFFFFFFF  FFFFFFFF 
+0x100D0070 : FFFFFFFF  FFFFFFFF  FFFFFFFF  0E5FFF05 
+
+A1:
+0x101D0000 : 56190527  10DE774F  0740D15B  DC4A1C00 
+0x101D0010 : 00000080  40000080  C0E48E71  00020205 
+0x101D0020 : 4C58504D  55534543  76657270  00000000 
+0x101D0030 : 00000000  00000000  00000000  00000000 
+0x101D0040 : 001C4A9C  80000040  00000040  26594131 
+0x101D0050 : FEFEFEFE  1FFFFFFF  10000019  18102504 
+0x101D0060 : 80000048  BAEAFFFF  FFFFFFFF  FFFFFFFF 
+0x101D0070 : FFFFFFFF  FFFFFFFF  FFFFFFFF  585E8AD9 
+
+A2:
+0x10450000 : 56190527  2890C959  0FFD8E5F  DC431D00 
+0x10450010 : 00000080  40000080  25F23EBD  00020205 
+0x10450020 : 4C58504D  55534543  76657270  00000000 
+0x10450030 : 00000000  00000000  00000000  00000000 
+0x10450040 : 001D439C  80000040  00000040  26594131 
+0x10450050 : FEFEFEFE  3FFFFFFF  30200018  20102002 
+0x10450060 : 80000048  BAEAFFFF  FFFFFFFF  FFFFFFFF 
+0x10450070 : FFFFFFFF  FFFFFFFF  FFFFFFFF  4A030816 
+
+A22:
+0x11000000 : FFFFFFFF  FFFFFFFF  FFFFFFFF  FFFFFFFF 
+0x11000010 : FFFFFFFF  FFFFFFFF  FFFFFFFF  FFFFFFFF 
+0x11000020 : FFFFFFFF  FFFFFFFF  FFFFFFFF  FFFFFFFF 
+0x11000030 : FFFFFFFF  FFFFFFFF  FFFFFFFF  FFFFFFFF 
+0x11000040 : FFFFFFFF  FFFFFFFF  FFFFFFFF  FFFFFFFF 
+0x11000050 : FFFFFFFF  FFFFFFFF  FFFFFFFF  FFFFFFFF 
+0x11000060 : FFFFFFFF  FFFFFFFF  FFFFFFFF  FFFFFFFF 
+0x11000070 : FFFFFFFF  FFFFFFFF  FFFFFFFF  FFFFFFFF 
+
+RT:
+0x11FE7000 : 10000019  18102504  FFFFFFFF  30200018 
+0x11FE7010 : 20102002  FFFFFFFF  FFFFFFFF  FFFFFFFF 
+
+EOS:
+0x8069F764 : 0000034C 
+

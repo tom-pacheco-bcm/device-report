@@ -1,0 +1,14 @@
+[
+  {
+    "path": "/Server 1/BACnet/IP Network",
+    "typeName": "bacnet.IPDataLink"
+  },
+  {
+    "path": "/Server 1/BACnet/Application",
+    "typeName": "bacnet.Application"
+  },
+  {
+    "path": "/Server 1/BACnet/Diagnostic Files",
+    "typeName": "bacnet.DiagnosticFilesFolder"
+  }
+]

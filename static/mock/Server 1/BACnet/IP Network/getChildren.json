@@ -1,0 +1,15 @@
+[
+  {
+    "path": "/Server 1/BACnet/IP Network/MP-C-24A",
+    "typeName": "bacnet.mpx.udt.MPC24A"
+  },
+  {
+    "path": "/Server 1/BACnet/IP Network/MP_1601001",
+    "typeName": "bacnet.mpx.udt.MPC15A"
+  },
+  {
+    "path": "/Server 1/BACnet/IP Network/BE.AHU4",
+    "description": "AHU-4 - 2nd Floor AA Office & BE Lobby",
+    "typeName": "bacnet.mpx.udt.MPC36A"
+  }
+]

@@ -1,0 +1,117 @@
+[
+  {
+    "path": "/Server 1/IO Bus",
+    "typeName": "io.IOBus"
+  },
+  {
+    "path": "/Server 1/OSS:Optimal Start-Stop",
+    "typeName": "nw8000.OSS"
+  },
+  {
+    "path": "/Server 1/A",
+    "description": "",
+    "typeName": "system.base.Folder"
+  },
+  {
+    "path": "/Server 1/A 1",
+    "description": "",
+    "typeName": "system.base.Folder"
+  },
+  {
+    "path": "/Server 1/A 2",
+    "description": "",
+    "typeName": "system.base.Folder"
+  },
+  {
+    "path": "/Server 1/A 3",
+    "description": "",
+    "typeName": "system.base.Folder"
+  },
+  {
+    "path": "/Server 1/A 4",
+    "description": "",
+    "typeName": "system.base.Folder"
+  },
+  {
+    "path": "/Server 1/A 5",
+    "description": "",
+    "typeName": "system.base.Folder"
+  },
+  {
+    "path": "/Server 1/A 6",
+    "description": "",
+    "typeName": "system.base.Folder"
+  },
+  {
+    "path": "/Server 1/A 7",
+    "description": "",
+    "typeName": "system.base.Folder"
+  },
+  {
+    "path": "/Server 1/A 8",
+    "description": "",
+    "typeName": "system.base.Folder"
+  },
+  {
+    "path": "/Server 1/A 9",
+    "description": "",
+    "typeName": "system.base.Folder"
+  },
+  {
+    "path": "/Server 1/A 10",
+    "description": "",
+    "typeName": "system.base.Folder"
+  },
+  {
+    "path": "/Server 1/s1",
+    "typeName": "search.SearchQuery"
+  },
+  {
+    "path": "/Server 1/BACnet",
+    "typeName": "bacnet.Device"
+  },
+  {
+    "path": "/Server 1/Device RSTP Report",
+    "typeName": "client.HTML"
+  },
+  {
+    "path": "/Server 1/Device Error Report",
+    "typeName": "client.HTML"
+  },
+  {
+    "path": "/Server 1/device-report-v1.4.3",
+    "typeName": "client.HTML"
+  },
+  {
+    "path": "/Server 1/IO Point Test",
+    "typeName": "client.HTML"
+  },
+  {
+    "path": "/Server 1/BACnet Name Tool",
+    "typeName": "client.HTML"
+  },
+  {
+    "path": "/Server 1/BACnet Namer",
+    "typeName": "client.HTML"
+  },
+  {
+    "path": "/Server 1/ClientUI",
+    "typeName": "client.HTML"
+  },
+  {
+    "path": "/Server 1/Alarm View",
+    "typeName": "alarm.AlarmViewer"
+  },
+  {
+    "path": "/Server 1/String Value",
+    "typeName": "server.point.SV"
+  },
+  {
+    "path": "/Server 1/Device RSTP Report 1",
+    "typeName": "client.HTML"
+  },
+  {
+    "path": "/Server 1/Device Error Report 1",
+    "typeName": "client.HTML"
+  }
+]
