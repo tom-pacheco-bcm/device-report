@@ -31,7 +31,7 @@
     </div>
     <div>
       <button
-        class="px-4 py-2 bg-sky-300 border border-blue-700 rounded-md hover:bg-blue-400 font-semibold text-md cursor-pointer"
+        class="px-4 py-2 bg-blue-500 text-white border border-blue-700 rounded-md hover:bg-blue-700 font-semibold text-md cursor-pointer"
         onclick={print}
       >
         Print pdf
