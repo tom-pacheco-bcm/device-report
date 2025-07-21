@@ -10,7 +10,21 @@ declare type Controller = {
   properties: PropertyInfo;
 };
 
-declare type DeviceReport = { [key: string]: string };
+declare type DeviceReport = {
+  path: string
+  props: Dictionary<string>
+  Firmware(): string
+  RSTP(): string
+  RSTPStatus(): string
+  MACAddress(): string
+  ProductId(): string
+  SerialNumber(): string
+  IPAddress(): string
+  text(): string
+  isLoaded(): boolean
+  load(): void
+  readFile(): Promise<void>
+};
 
 declare type State = {
   Nodes: ChildInfo[];
@@ -39,6 +53,7 @@ declare type ControllerInfo = {
   RSTPStatus: string;
   MACAddress: string;
   IPAddress: string;
+  loaded: boolean;
 };
 
 

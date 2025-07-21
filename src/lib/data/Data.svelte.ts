@@ -1,5 +1,3 @@
-import { parse } from "./device-report";
-
 import { getBACnetInterfacePath } from "../client-helpers/getBACnetInterfacePath";
 import { getBACnetIPNetworks } from "../client-helpers/getBACnetIPNetworks";
 import { getChildren } from "../client-helpers/getChildren";
@@ -9,8 +7,8 @@ import { isSmartX } from "../util/isSmartX";
 import { isVendorSE } from "../util/isVendorSE";
 import { pathName } from "../util/pathName";
 import { pathsSelector } from "../util/pathsSelector";
+import { DeviceReport, getDeviceReport } from "./DeviceReport.svelte";
 
-const REPORT_FILE = Symbol("report-file");
 const PROP_STATUS = "Status"
 const PROP_MODEL = "ModelName"
 const PROP_VENDOR = "VendorIdentifier"
@@ -26,7 +24,7 @@ export let appState: State = $state({
   Reports: {},
   Progress: {
     Value: 0,
-    Max: 100,
+    Max: 0,
   },
 });
 
@@ -113,6 +111,7 @@ async function addBACnetNodes(cs: ChildInfo[]) {
   return paths
 }
 
+
 function getBACnetNodes(path: string) {
   return getChildren(path)
     .then(addBACnetNodes)
@@ -128,6 +127,10 @@ function progressReset(max: number) {
   appState.Progress.Max = max;
 }
 
+function progressUpdate(count: number = 1) {
+  appState.Progress.Value += count;
+}
+
 function progressAddTasks(count: number) {
   if (appState.Progress.Value == appState.Progress.Max) {
     progressReset(count)
@@ -141,6 +144,7 @@ async function getControllers(networkPaths: string[]) {
   const paths: string[] = []
   for (let p of networkPaths) {
     const newPaths = await getBACnetNodes(p)
+    progressUpdate()
     paths.push(...newPaths)
   }
   return paths
@@ -172,70 +176,24 @@ function newController(ci: ChildInfo) {
   return ci.path
 }
 
+function addReport(r: DeviceReport) {
+  appState.Reports[r.path] = r
+  return r
+}
+
 async function readReports() {
-  const max_request = 2;
-  let counter = 0;
-  let pos = 0;
 
-  progressReset(appState.Paths.length);
-
-  const next = () => {
-    while (pos < appState.Paths.length && counter < max_request) {
-      const path = appState.Paths[pos];
-      pos++;
-      if (!isVendorSE(appState.Controllers[path].vendorId)) {
-        appState.Progress.Value++;
-        continue
-      }
-      if (!isSmartX(appState.Controllers[path].model)) {
-        appState.Progress.Value++;
-        continue
-      }
-      if (!appState.Controllers[path].online) {
-        appState.Progress.Value++;
-        continue
-      }
-      makeRequest(path);
-    }
-  };
-
-  const done = () => {
-    appState.Progress.Value++;
-    counter--;
-    next();
-  };
-
-  const makeRequest = (path: string) => {
-    counter++;
-    readDeviceReport(path)
-      .then(reportHandler)
-      .finally(done);
-  };
-  next();
-}
-
-export function readReport(path: string) {
-  return readDeviceReport(path)
-    .then(reportHandler)
-}
-
-const DEVICE_REPORT_PATH = "/Diagnostic Files/Device Report";
-
-function readDeviceReport(path: string) {
-  const objectPath = path + DEVICE_REPORT_PATH;
-  return client.readFile(objectPath)
-    .then((text) => ({ path, text }))
-};
-
-export function getDeviceReport(path: string) {
-  const report = appState.Reports[path];
-  if (!report) { return "" }
-  return report[String(REPORT_FILE)]
-};
-
-function reportHandler(result: { path: string, text: string }) {
-  if (!result.text) { return }
-  const report = parse(result.text);
-  report[String(REPORT_FILE)] = result.text;
-  appState.Reports[result.path] = report;
+  return Promise.allSettled(
+    appState.Paths
+      .filter(p => {
+        const c = appState.Controllers[p]
+        return isVendorSE(c.vendorId)
+          && isSmartX(c.model)
+          && c.online
+      })
+      .map(p => getDeviceReport(p).then(addReport))
+  ).then(ps =>
+    ps.filter(p => p.status == 'fulfilled')
+      .map(p => p.value)
+  );
 }

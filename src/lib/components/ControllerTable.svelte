@@ -1,16 +1,8 @@
 <script lang="ts">
-  import { getDeviceReport, readReport } from "../data/Data.svelte";
   import { isSmartX } from "../util/isSmartX";
   import { isVendorSE } from "../util/isVendorSE";
   import Report from "./Report.svelte";
 
-  const k_ActiveFW = "ActiveFWRev";
-  const k_RSTP = "RSTP";
-  const k_rstpStatus = "RSTP Status";
-  const k_MACAddress = "MACAddress";
-  const k_ProductId = "Product Id";
-  const k_SerialNumber = "Serial Number";
-  const k_IPAddress = "IP Address";
   const UNAVAILABLE = "Unavailable";
 
   let { appState }: { appState: State } = $props();
@@ -22,8 +14,14 @@
   let reportText = $state("");
 
   function viewReport(path: string) {
-    reportText = getDeviceReport(path);
+    const report = appState.Reports[path];
+    reportText = report.text();
     showReport = true;
+  }
+
+  function readReport(path: string) {
+    const report = appState.Reports[path];
+    report.load();
   }
 
   const getTableData = function (
@@ -49,16 +47,18 @@
         ProductId: UNAVAILABLE,
         SerialNumber: UNAVAILABLE,
         IPAddress: UNAVAILABLE,
+        loaded: false,
       };
 
-      if (report) {
-        info.Firmware = report[k_ActiveFW];
-        info.RSTP = report[k_RSTP];
-        info.RSTPStatus = report[k_rstpStatus];
-        info.MACAddress = report[k_MACAddress];
-        info.ProductId = report[k_ProductId];
-        info.SerialNumber = report[k_SerialNumber];
-        info.IPAddress = report[k_IPAddress];
+      if (report && report.isLoaded()) {
+        info.Firmware = report.Firmware();
+        info.RSTP = report.RSTP();
+        info.RSTPStatus = report.RSTPStatus();
+        info.MACAddress = report.MACAddress();
+        info.ProductId = report.ProductId();
+        info.SerialNumber = report.SerialNumber();
+        info.IPAddress = report.IPAddress();
+        info.loaded = report.isLoaded();
       }
       return info;
     });
@@ -211,9 +211,9 @@
             {/if}
           {/each}
           <td class="py-1 flex">
-            <div class="group relative inline-block">
+            <div class="group relative inline-block" hidden={!ctr.loaded}>
               <button
-                class="text-lg px-1 hover:bg-indigo-200 print:hidden cursor-pointer"
+                class="text-md px-1 hover:bg-indigo-200 print:hidden cursor-pointer"
                 onclick={() => {
                   readReport(ctr.Path);
                 }}>↺</button
@@ -224,9 +224,9 @@
                 Refresh
               </span>
             </div>
-            <div class="group relative inline-block">
+            <div class="group relative inline-block" hidden={!ctr.loaded}>
               <button
-                class="text-lg px-1 hover:bg-indigo-200 print:hidden cursor-pointer"
+                class="text-md px-1 hover:bg-indigo-200 print:hidden cursor-pointer"
                 onclick={() => {
                   viewReport(ctr.Path);
                 }}>&#128463;</button
